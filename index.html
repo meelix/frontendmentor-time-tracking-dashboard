@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Time tracking dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main>
+    <div class="grid">
+      <div class="profile">
+        <div class="container asdf">
+          <img src="./images/image-jeremy.png" alt="Profile Picture" width="65" height="65">
+          <div>
+            <span>Report for</span>
+            <h1>Jeremy Robson</h1>
+          </div>
+        </div>
+        <div class="container" id="filter">
+          <button data-filter="daily">Daily</button>
+          <button data-filter="weekly">Weekly</button>
+          <button data-filter="monthly">Monthly</button>
+        </div>
+                  
+      </div>
+      <div class="work card" data-index="0">
+        <a href="#" class="top container">         
+          <div class="title">Work</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+      <div class="play card" data-index="1">
+        <a href="#" class="top container">         
+          <div class="title">Play</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+      <div class="study card" data-index="2">
+        <a href="#" class="top container">         
+          <div class="title">Study</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+      <div class="exercise card" data-index="3">
+        <a href="#" class="top container">         
+          <div class="title">Exercise</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+      <div class="social card" data-index="4">
+        <a href="#" class="top container">         
+          <div class="title">Social</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+      <div class="self-care card" data-index="5">
+        <a href="#" class="top container">         
+          <div class="title">Self Care</div>
+          <div class="actions"><button class="kebab"></button></div>
+          <div class="current">32hrs</div>
+          <div class="previous">Last Week - 36hrs</div>
+        </a>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="https://github.com/meelix">Meelix :3</a>.
+  </footer>
+
+  <script>
+    let buttons = document.querySelectorAll("[data-filter]")
+    let currentFilter = "weekly";
+
+    fetch('./data.json')
+    .then(response => response.json())
+    .then(data => {
+      setFilter(currentFilter);
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => setFilter(btn.getAttribute("data-filter")))
+      });
+
+      function setFilter(filter) {
+        currentFilter = filter;
+        buttons.forEach(btn => {
+          btn.classList.remove("active");
+        });
+        
+        document.querySelector(`[data-filter="${filter}"]`).classList.add("active")
+
+        for (i=0;i<data.length;i++) {
+          switch(currentFilter) {
+            case 'daily':
+              document.querySelector(`[data-index="${i}"] .current`).textContent = `${data[i].timeframes.daily.current}hr${data[i].timeframes.daily.current === 1 ? "" : "s"}`;
+              document.querySelector(`[data-index="${i}"] .previous`).textContent =`Yesterday - ${data[i].timeframes.daily.previous}hr${data[i].timeframes.daily.previous === 1 ? "" : "s"}`;
+              break;
+            case 'weekly':
+              document.querySelector(`[data-index="${i}"] .current`).textContent = `${data[i].timeframes.weekly.current}hr${data[i].timeframes.weekly.current === 1 ? "" : "s"}`;
+              document.querySelector(`[data-index="${i}"] .previous`).textContent =`Last Week - ${data[i].timeframes.weekly.previous}hr${data[i].timeframes.weekly.previous === 1 ? "" : "s"}`;
+              break;
+            case 'monthly':
+              document.querySelector(`[data-index="${i}"] .current`).textContent = `${data[i].timeframes.monthly.current}hr${data[i].timeframes.monthly.current === 1 ? "" : "s"}`;
+              document.querySelector(`[data-index="${i}"] .previous`).textContent =`Last Month - ${data[i].timeframes.monthly.previous}hr${data[i].timeframes.monthly.previous === 1 ? "" : "s"}`;
+              break;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
